@@ -1,14 +1,13 @@
-"use strict";
+'use strict';
 
 var printf = require('printf');
 var bigInt = require('big-integer');
-var fs = require('fs');
 var logger = require('winston');
 var cdbDescriptors = require('./cdb-descriptors');
 
 class ScsiCdb {
     encode() {
-        throw new Error("Unimplemented");
+        throw new Error('Unimplemented');
     }
 
     /**
@@ -30,16 +29,15 @@ class ScsiCdb {
         if (endByte < inputArray.length) {
             // Now we know the input array is long enough for use to extract the
             // field from.
-            var value = bigInt();
-            var bitsDecoded = 0;
+            let value = bigInt();
 
-            var byteIndex = byteOffset;
-            var bitIndex = bitOffset;
-            var bitsLeft = fieldLength;
+            let byteIndex = byteOffset;
+            let bitIndex = bitOffset;
+            let bitsLeft = fieldLength;
 
             while (bitsLeft > 0) {
-                var bitsAvailableInCurrentByte = (8 - bitIndex);
-                var bitsToDecode;
+                let bitsAvailableInCurrentByte = (8 - bitIndex);
+                let bitsToDecode;
                 if (bitsLeft > bitsAvailableInCurrentByte) {
                     bitsToDecode = bitsAvailableInCurrentByte;
                 } else {
@@ -49,8 +47,8 @@ class ScsiCdb {
                 // Now the first part of the decoding - we take the byte at the
                 // current byteOffset, and right-shift it by bitOffset bits.  We
                 // then need to mask off just bitsToDecode bits of it.
-                var bitmask = (1 << bitsToDecode) - 1;
-                var v = inputArray[byteIndex];
+                let bitmask = (1 << bitsToDecode) - 1;
+                let v = inputArray[byteIndex];
                 v = v >> bitIndex;
                 v = v & bitmask;
 
@@ -59,7 +57,6 @@ class ScsiCdb {
                 // existing value to make space for it.
                 value = value.shiftLeft(bitsToDecode).or(v);
 
-                bitsDecoded += bitsToDecode;
                 bitsLeft -= bitsToDecode;
 
                 bitIndex += bitsToDecode;
@@ -71,7 +68,7 @@ class ScsiCdb {
 
             return value;
         } else {
-            throw new Error("Input truncated");
+            throw new Error('Input truncated');
         }
     }
 
@@ -103,33 +100,29 @@ class ScsiCdb {
         }
     }
 
-    getServiceAction(input, operationCode) {
-        let cdbs = this.cdb[operationCode];
-    }
-
     decode(input) {
         if (input == null) {
-            throw new Error("Invalid input");
+            throw new Error('Invalid input');
         }
 
         if (!(input instanceof Array)) {
-            throw new Error("Invalid input");
+            throw new Error('Invalid input');
         }
 
         input.forEach((element) => {
             if (typeof element === 'number') {
                 let remainder = element % 1;
                 if (remainder != 0) {
-                    throw new Error("Invalid input");
+                    throw new Error('Invalid input');
                 } else if (element < 0 || element > 255) {
-                    throw new Error("Invalid input");
+                    throw new Error('Invalid input');
                 }
             } else {
-                throw new Error("Invalid input");
+                throw new Error('Invalid input');
             }
         });
 
-        logger.info('Encoded CDB: ' + input.map(element => printf("%02x", element)).join(" "));
+        logger.info('Encoded CDB: ' + input.map(element => printf('%02x', element)).join(' '));
 
         // Step through each message - attempt to decode the identifiers
         // and see if they match.
@@ -152,7 +145,7 @@ class ScsiCdb {
         });
 
         if (cdbDescriptor === undefined) {
-          throw new Error(`Unknown CDB`);
+            throw new Error('Unknown CDB');
         }
 
         var output = {
@@ -182,7 +175,7 @@ class ScsiCdb {
 
                 output.truncated = true;
             } else {
-                logger.error("Unknown exception: ", e);
+                logger.error('Unknown exception: ', e);
             }
         }
 
