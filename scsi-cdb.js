@@ -18,7 +18,7 @@ class ScsiCdb {
      * @param bitOffset - Bit offset within the byte at which the field starts.
      *
      */
-    function getField(inputArray, fieldLength, byteOffset, bitOffset) {
+    getField(inputArray, fieldLength, byteOffset, bitOffset) {
         var startBit = (byteOffset * 8) + bitOffset;
         var endBit = startBit + fieldLength - 1; // -1 is because we want the index of the last bit rather than the number of bits.
         var endByte = parseInt((endBit) / 8);
@@ -87,7 +87,7 @@ class ScsiCdb {
         if (field === undefined) {
             return undefined;
         } else {
-            return getField(encodedCdb, field.length, field.byte, field.bit);
+            return this.getField(encodedCdb, field.length, field.byte, field.bit);
         }
     }
 
@@ -167,7 +167,7 @@ class ScsiCdb {
         logger.info('Encoded CDB identified as ' + cdbDescriptor.name);
             
         try {
-            cdbDescriptor.fields.forEach(function(field) {
+            cdbDescriptor.fields.forEach((field) => {
                 var value = this.getField(input, field.length, field.byte, field.bit);
                 logger.info(`Decoded ${field.name} as 0x${value.toString(16)}`);
                 output.fields.push({
