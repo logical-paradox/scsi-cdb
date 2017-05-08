@@ -10,7 +10,10 @@ node {
         }
 
         stage('Test') {
-            sh 'npm test'
+            steps {
+                sh 'npm run lint'
+                sh 'npm test'
+            }
         }
 
         stage('Deploy') {
