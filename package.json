@@ -4,7 +4,8 @@
   "description": "SCSI CDB encoder and decoder",
   "main": "scsi-cdb.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint *.js"
   },
   "repository": {
     "type": "git",
