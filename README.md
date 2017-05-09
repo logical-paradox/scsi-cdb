@@ -29,6 +29,12 @@ console.log(parsedCdb);
   truncated: false }
 ```
 
+Additional debug information can be output by setting the log level:
+
+```
+var scsiCdb = new ScsiCdb({ logLevel: 'debug' });
+```
+
 Test
 ====
 

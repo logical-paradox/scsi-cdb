@@ -6,6 +6,12 @@ var logger = require('winston');
 var cdbDescriptors = require('./cdb-descriptors');
 
 class ScsiCdb {
+    constructor(args) {
+        if (args !== undefined) {
+            logger.level = args.logLevel;
+        }
+    }
+
     encode() {
         throw new Error('Unimplemented');
     }
@@ -122,7 +128,7 @@ class ScsiCdb {
             }
         });
 
-        logger.info('Encoded CDB: ' + input.map(element => printf('%02x', element)).join(' '));
+        logger.debug('Encoded CDB: ' + input.map(element => printf('%02x', element)).join(' '));
 
         // Step through each message - attempt to decode the identifiers
         // and see if they match.
@@ -157,12 +163,12 @@ class ScsiCdb {
         // We have identified our message correctly, now try and decode it.
         output.name = cdbDescriptor.name;
 
-        logger.info('Encoded CDB identified as ' + cdbDescriptor.name);
+        logger.debug('Encoded CDB identified as ' + cdbDescriptor.name);
             
         try {
             cdbDescriptor.fields.forEach((field) => {
                 var value = this.getField(input, field.length, field.byte, field.bit);
-                logger.info(`Decoded ${field.name} as 0x${value.toString(16)}`);
+                logger.debug(`Decoded ${field.name} as 0x${value.toString(16)}`);
                 output.fields.push({
                     name: field.name,
                     value: value.toString(16),
@@ -172,7 +178,6 @@ class ScsiCdb {
             });
         } catch (e) {
             if (/Input truncated/.test(e)) {
-
                 output.truncated = true;
             } else {
                 logger.error('Unknown exception: ', e);
