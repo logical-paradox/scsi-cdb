@@ -172,7 +172,7 @@ class ScsiCdb {
                 output.fields.push({
                     name: field.name,
                     bits: field.length,
-                    value: printf("0x%s", value.toString(16)),
+                    value: printf('0x%s', value.toString(16)),
                     reserved: field.reserved ? true : false,
                     obsolete: field.obsolete ? true : false,
                 });
