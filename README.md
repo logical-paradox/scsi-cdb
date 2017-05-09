@@ -12,7 +12,7 @@ Examples
 ========
 
 ```javascript
-var ScsiCdb = require('scsi-cdb');
+var ScsiCdb = require('./scsi-cdb');
 var scsiCdb = new ScsiCdb();
 var parsedCdb = scsiCdb.decode([ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ]);
 console.log(parsedCdb);
@@ -21,11 +21,20 @@ console.log(parsedCdb);
 { name: 'TEST UNIT READY',
   fields: 
    [ { name: 'OPERATION CODE',
-       value: '0',
+       bits: 8,
+       value: '0x0',
        reserved: false,
        obsolete: false },
-     { name: 'Reserved', value: '0', reserved: true, obsolete: false },
-     { name: 'CONTROL', value: '0', reserved: false, obsolete: false } ],
+     { name: 'Reserved',
+       bits: 32,
+       value: '0x0',
+       reserved: true,
+       obsolete: false },
+     { name: 'CONTROL',
+       bits: 8,
+       value: '0x0',
+       reserved: false,
+       obsolete: false } ],
   truncated: false }
 ```
 
