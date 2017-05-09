@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://gareth@git.237.egregious.org.uk:29418/scsi-cdb"
+    "url": "https://github.com/logical-paradox/scsi-cdb.git"
   },
   "author": "Gareth John <gdjohn@logicalparadox.co.uk> (http://logicalparadox.co.uk)",
   "license": "MIT",
