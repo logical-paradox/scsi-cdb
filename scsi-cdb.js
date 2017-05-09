@@ -171,7 +171,8 @@ class ScsiCdb {
                 logger.debug(`Decoded ${field.name} as 0x${value.toString(16)}`);
                 output.fields.push({
                     name: field.name,
-                    value: value.toString(16),
+                    bits: field.length,
+                    value: printf("0x%s", value.toString(16)),
                     reserved: field.reserved ? true : false,
                     obsolete: field.obsolete ? true : false,
                 });
