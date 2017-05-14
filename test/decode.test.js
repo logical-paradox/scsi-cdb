@@ -130,6 +130,29 @@ describe('scsi-cdb', function() {
             });
             done();
         });
+
+        it('should decode a VERIFY (10) message successfully', function(done) {
+            var output = scsiCdb.decode([ 0x2f, 0xf6, 0xde, 0xad, 0xbe, 0xef, 0x3f, 0x2b, 0xb2, 0x12 ]);
+            expect(output).to.deep.equal({
+                name: "VERIFY (10)",
+                fields: [
+                    { name: "OPERATION CODE", bits: 8, value: "0x2f", reserved: false, obsolete: false },
+                    { name: "Obsolete", bits: 1, value: "0x0", reserved: false, obsolete: true },
+                    { name: "BYTCHK", bits: 2, value: "0x3", reserved: false, obsolete: false },
+                    { name: "Reserved", bits: 1, value: "0x0", reserved: true, obsolete: false },
+                    { name: "DPO", bits: 1, value: "0x1", reserved: false, obsolete: false },
+                    { name: "VRPROTECT", bits: 3, value: "0x7", reserved: false, obsolete: false },
+                    { name: "LOGICAL BLOCK ADDRESS", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+                    { name: "GROUP NUMBER", bits: 6, value: "0x3f", reserved: false, obsolete: false },
+                    { name: "Reserved", bits: 1, value: "0x0", reserved: true, obsolete: false },
+                    { name: "Restricted for MMC-6", bits: 1, value: "0x0", reserved: false, obsolete: false },
+                    { name: "VERIFICATION LENGTH", bits: 16, value: "0x2bb2", reserved: false, obsolete: false },
+                    { name: "CONTROL", bits: 8, value: "0x12", reserved: false, obsolete: false },
+                ],
+                truncated: false,
+            });
+            done();
+        });
     });
   });
 });
