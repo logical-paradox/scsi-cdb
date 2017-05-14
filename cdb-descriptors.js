@@ -2126,7 +2126,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 1,
                 'byte': 1,
-                'bit': 3
+                'bit': 3,
+                'reserved': true
             },
             {
                 'name': 'DPO',
