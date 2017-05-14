@@ -1,7 +1,7 @@
 node {
 
     stage('Clone') {
-        git url: 'ssh://jenkins@git.237.egregious.org.uk:29418/scsi-cdb'
+        checkout scm
     }
 
     withEnv(['PATH+RBENV=$HOME/.rbenv/bin:$HOME/.rbenv/shims']) {
