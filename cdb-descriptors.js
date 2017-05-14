@@ -50,7 +50,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 88,
                 'byte': 4,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
