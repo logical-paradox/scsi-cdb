@@ -1,6 +1,7 @@
 'use strict';
 
 let cdbDescriptors = [
+    // SCSI Block Commands (SBC-4) 29 May 2015
     {
         'name': 'BACKGROUND CONTROL',
         'fields': [
@@ -78,22 +79,9 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 1,
+                'length': 3,
                 'byte': 1,
                 'bit': 0,
-                'reserved': true
-            },
-            {
-                'name': 'FUA_NV',
-                'length': 1,
-                'byte': 1,
-                'bit': 1
-            },
-            {
-                'name': 'Reserved',
-                'length': 1,
-                'byte': 1,
-                'bit': 2,
                 'reserved': true
             },
             {
@@ -124,7 +112,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 24,
                 'byte': 10,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'NUMBER OF LOGICAL BLOCKS',
@@ -174,7 +163,7 @@ let cdbDescriptors = [
                 'bit': 0
             },
             {
-                'name': 'CMPLIST',
+                'name': 'CMPLST',
                 'length': 1,
                 'byte': 1,
                 'bit': 3
@@ -204,10 +193,11 @@ let cdbDescriptors = [
                 'bit': 0
             },
             {
-                'name': 'Obsolete',
+                'name': 'Reserved',
                 'length': 16,
                 'byte': 3,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
@@ -243,7 +233,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 1,
-                'bit': 5
+                'bit': 5,
+                'reserved': true
             },
             {
                 'name': 'STARTING LOGICAL BLOCK ADDRESS',
@@ -310,7 +301,7 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'STARTING STREAM IDENTIFIED',
+                'name': 'STARTING STREAM IDENTIFIER',
                 'length': 16,
                 'byte': 4,
                 'bit': 0
@@ -384,7 +375,7 @@ let cdbDescriptors = [
                 'bit': 5
             },
             {
-                'name': 'STARTING LOGICAL BLOCK ADDRESS',
+                'name': 'LOGICAL BLOCK ADDRESS',
                 'length': 64,
                 'byte': 2,
                 'bit': 0
@@ -474,8 +465,6 @@ let cdbDescriptors = [
                 'length': 6,
                 'byte': 6,
                 'bit': 0,
-                'id': true,
-                'value': 14
             },
             {
                 'name': 'Reserved',
@@ -494,7 +483,9 @@ let cdbDescriptors = [
                 'name': 'SERVICE ACTION',
                 'length': 16,
                 'byte': 8,
-                'bit': 0
+                'bit': 0,
+                'value': 0xe,
+                'id': true
             },
             {
                 'name': 'Reserved',
@@ -656,7 +647,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 6,
                 'byte': 1,
-                'bit': 2
+                'bit': 2,
+                'reserved': true
             },
             {
                 'name': 'LOGICAL BLOCK ADDRESS',
@@ -706,11 +698,11 @@ let cdbDescriptors = [
                 'value': 144
             },
             {
-                'name': 'Obsolete',
+                'name': 'Reserved',
                 'length': 1,
                 'byte': 1,
                 'bit': 0,
-                'obsolete': true
+                'reserved': true
             },
             {
                 'name': 'IMMED',
@@ -722,7 +714,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 6,
                 'byte': 1,
-                'bit': 2
+                'bit': 2,
+                'reserved': true
             },
             {
                 'name': 'LOGICAL BLOCK ADDRESS',
@@ -800,7 +793,7 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 8,
+                'length': 6,
                 'byte': 4,
                 'bit': 2,
                 'reserved': true
@@ -970,10 +963,16 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 2,
+                'length': 1,
                 'byte': 10,
                 'bit': 6,
                 'reserved': true
+            },
+            {
+                'name': 'Restricted for MMC-6',
+                'length': 1,
+                'byte': 10,
+                'bit': 7,
             },
             {
                 'name': 'CONTROL',
@@ -1292,7 +1291,7 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 1,
+                'length': 3,
                 'byte': 1,
                 'bit': 5,
                 'reserved': true
@@ -1355,7 +1354,7 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'DEFECT LIST_FORMAT',
+                'name': 'DEFECT LIST FORMAT',
                 'length': 3,
                 'byte': 2,
                 'bit': 0
@@ -1376,7 +1375,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 2,
-                'bit': 5
+                'bit': 5,
+                'reserved': true
             },
             {
                 'name': 'Reserved',
@@ -1411,63 +1411,65 @@ let cdbDescriptors = [
                 'byte': 0,
                 'bit': 0,
                 'id': true,
-                'value': 158
+                'value': 0xb7
             },
             {
-                'name': 'SERVICE ACTION',
-                'length': 5,
+                'name': 'DEFECT LIST FORMAT',
+                'length': 3,
                 'byte': 1,
-                'bit': 0,
-                'id': true,
-                'value': 16
+                'bit': 0
+            },
+            {
+                'name': 'REQ_GLIST',
+                'length': 1,
+                'byte': 1,
+                'bit': 3
+            },
+            {
+                'name': 'REQ_PLIST',
+                'length': 1,
+                'byte': 1,
+                'bit': 4
             },
             {
                 'name': 'Reserved',
-                'length': 1,
+                'length': 3,
                 'byte': 1,
                 'bit': 5,
                 'reserved': true
             },
             {
-                'name': 'Obsolete',
-                'length': 64,
+                'name': 'ADDRESS DESCRIPTOR INDEX',
+                'length': 32,
                 'byte': 2,
                 'bit': 0,
-                'obsolete': true
             },
             {
                 'name': 'ALLOCATION LENGTH',
                 'length': 32,
-                'byte': 10,
-                'bit': 0
-            },
-            {
-                'name': 'Obsolete',
-                'length': 1,
-                'byte': 14,
+                'byte': 6,
                 'bit': 0,
-                'obsolete': true
             },
             {
                 'name': 'Reserved',
-                'length': 7,
-                'byte': 14,
-                'bit': 1,
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
                 'reserved': true
             },
             {
                 'name': 'CONTROL',
                 'length': 8,
-                'byte': 15,
+                'byte': 11,
                 'bit': 0
             }
         ],
         'identifiers': [
             'OPERATION CODE',
-            'SERVICE ACTION'
         ]
     },
     {
+        'obsolete': true,
         'name': 'READ LONG (10)',
         'fields': [
             {
@@ -1640,7 +1642,7 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 32,
+                'length': 24,
                 'byte': 2,
                 'bit': 0,
                 'reserved': true
@@ -1704,7 +1706,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 7,
                 'byte': 14,
-                'bit': 1
+                'bit': 1,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
@@ -1712,6 +1715,63 @@ let cdbDescriptors = [
                 'byte': 15,
                 'bit': 0
             }
+        ],
+        'identifiers': [
+            'OPERATION CODE',
+            'SERVICE ACTION'
+        ]
+    },
+    {
+        'name': 'REPORT PROVISIONING INITIALZATION PATTERN',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x3a
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'value': 0x1d
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 6,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0
+            },
         ],
         'identifiers': [
             'OPERATION CODE',
@@ -1742,10 +1802,10 @@ let cdbDescriptors = [
                 'bit': 5
             },
             {
-                'name': 'Reserved',
+                'name': 'ZNR',
                 'length': 1,
                 'byte': 1,
-                'bit': 6
+                'bit': 6,
             },
             {
                 'name': 'IMMED',
@@ -1775,7 +1835,6 @@ let cdbDescriptors = [
         ],
         'identifiers': [
             'OPERATION CODE',
-            'SERVICE ACTION'
         ]
     },
     {
@@ -1799,13 +1858,15 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 7,
                 'byte': 1,
-                'bit': 1
+                'bit': 1,
+                'reserved': true
             },
             {
                 'name': 'Reserved',
                 'length': 8,
                 'byte': 2,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'POWER CONDITION MODIFIER',
@@ -1815,6 +1876,38 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
+                'length': 4,
+                'byte': 3,
+                'bit': 4,
+                'reserved': true
+            },
+            {
+                'name': 'START',
+                'length': 1,
+                'byte': 4,
+                'bit': 0
+            },
+            {
+                'name': 'LOEJ',
+                'length': 1,
+                'byte': 4,
+                'bit': 1
+            },
+            {
+                'name': 'NO_FLUSH',
+                'length': 1,
+                'byte': 4,
+                'bit': 2
+            },
+            {
+                'name': 'Reserved',
+                'length': 1,
+                'byte': 4,
+                'bit': 3,
+                'reserved': true
+            },
+            {
+                'name': 'POWER CONDITION',
                 'length': 4,
                 'byte': 4,
                 'bit': 4
@@ -1940,7 +2033,7 @@ let cdbDescriptors = [
             },
             {
                 'name': 'GROUP NUMBER',
-                'length': 5,
+                'length': 6,
                 'byte': 6,
                 'bit': 0
             },
@@ -1948,7 +2041,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 6,
-                'bit': 6
+                'bit': 6,
+                'reserved': true
             },
             {
                 'name': 'NUMBER OF LOGICAL BLOCKS',
@@ -2027,7 +2121,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 14,
-                'bit': 6
+                'bit': 6,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
@@ -2065,10 +2160,11 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'LOGICAL BLOCK ADDRESS',
+                'name': 'Reserved',
                 'length': 32,
                 'byte': 2,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'GROUP NUMBER',
@@ -2080,7 +2176,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 6,
-                'bit': 6
+                'bit': 6,
+                'reserved': true,
             },
             {
                 'name': 'PARAMETER LIST LENGTH',
@@ -2212,7 +2309,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 1,
                 'byte': 1,
-                'bit': 3
+                'bit': 3,
+                'reserved': true
             },
             {
                 'name': 'DPO',
@@ -2248,7 +2346,7 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 10,
-                'bit': 5,
+                'bit': 6,
                 'reserved': true
             },
             {
@@ -2409,7 +2507,7 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 1,
                 'byte': 10,
-                'bit': 2,
+                'bit': 3,
                 'reserved': true
             },
             {
@@ -3247,7 +3345,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 1,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'FUA',
@@ -3295,7 +3394,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 14,
-                'bit': 6
+                'bit': 6,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
@@ -3473,7 +3573,7 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'PBLOCK',
+                'name': 'Obsolete',
                 'length': 1,
                 'byte': 1,
                 'bit': 5,
@@ -3486,7 +3586,7 @@ let cdbDescriptors = [
                 'bit': 6
             },
             {
-                'name': 'COR_DIS',
+                'name': 'Obsolete',
                 'length': 1,
                 'byte': 1,
                 'bit': 7,
@@ -3506,7 +3606,7 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'BYTE TRANSFER LENGTH',
+                'name': 'Obsolete',
                 'length': 16,
                 'byte': 7,
                 'bit': 0,
@@ -3543,7 +3643,7 @@ let cdbDescriptors = [
                 'value': 17
             },
             {
-                'name': 'PBLOCK',
+                'name': 'Obsolete',
                 'length': 1,
                 'byte': 1,
                 'bit': 5,
@@ -3556,7 +3656,7 @@ let cdbDescriptors = [
                 'bit': 6
             },
             {
-                'name': 'COR_DIS',
+                'name': 'Obsolete',
                 'length': 1,
                 'byte': 1,
                 'bit': 7,
@@ -3576,7 +3676,7 @@ let cdbDescriptors = [
                 'reserved': true
             },
             {
-                'name': 'BYTE TRANSFER LENGTH',
+                'name': 'Obsolete',
                 'length': 16,
                 'byte': 12,
                 'bit': 0,
@@ -3584,7 +3684,7 @@ let cdbDescriptors = [
             },
             {
                 'name': 'Reserved',
-                'length': 16,
+                'length': 8,
                 'byte': 14,
                 'bit': 0,
                 'reserved': true
@@ -3736,7 +3836,7 @@ let cdbDescriptors = [
             {
                 'name': 'Reserved',
                 'length': 2,
-                'byte': 15,
+                'byte': 14,
                 'bit': 6,
                 'reserved': true
             },
@@ -3812,7 +3912,8 @@ let cdbDescriptors = [
                 'name': 'Obsolete',
                 'length': 2,
                 'byte': 10,
-                'bit': 1
+                'bit': 1,
+                'obsolete': true
             },
             {
                 'name': 'UNMAP',
@@ -3890,7 +3991,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 1,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'FUA',
@@ -3938,7 +4040,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 2,
                 'byte': 14,
-                'bit': 6
+                'bit': 6,
+                'reserved': true
             },
             {
                 'name': 'CONTROL',
@@ -3983,13 +4086,13 @@ let cdbDescriptors = [
             },
             {
                 'name': 'GROUP NUMBER',
-                'length': 5,
+                'length': 6,
                 'byte': 6,
                 'bit': 0
             },
             {
                 'name': 'Reserved',
-                'length': 3,
+                'length': 2,
                 'byte': 6,
                 'bit': 5,
                 'reserved': true
@@ -4012,7 +4115,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 10,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'FUA',
@@ -4098,16 +4202,18 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 1,
-                'bit': 0
+                'bit': 5,
+                'reserved': true
             },
             {
                 'name': 'Reserved',
                 'length': 32,
                 'byte': 2,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
-                'name': 'LIST IDENTIFIED',
+                'name': 'LIST IDENTIFIER',
                 'length': 32,
                 'byte': 6,
                 'bit': 0
@@ -4127,7 +4233,7 @@ let cdbDescriptors = [
             {
                 'name': 'Reserved',
                 'length': 2,
-                'byte': 15,
+                'byte': 14,
                 'bit': 6,
                 'reserved': true
             },
@@ -4394,7 +4500,8 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 3,
                 'byte': 1,
-                'bit': 5
+                'bit': 5,
+                'reserved': true
             },
             {
                 'name': 'LOGICAL BLOCK ADDRESS',
@@ -4539,76 +4646,13 @@ let cdbDescriptors = [
                 'name': 'Reserved',
                 'length': 64,
                 'byte': 20,
-                'bit': 0
+                'bit': 0,
+                'reserved': true
             },
             {
                 'name': 'TRANSFER LENGTH',
                 'length': 32,
                 'byte': 28,
-                'bit': 0
-            }
-        ],
-        'identifiers': [
-            'OPERATION CODE',
-            'SERVICE ACTION'
-        ]
-    },
-    {
-        'name': 'RECEIVE ROD TOKEN INFORMATION',
-        'fields': [
-            {
-                'name': 'OPERATION CODE',
-                'length': 8,
-                'byte': 0,
-                'bit': 0,
-                'id': true,
-                'value': 132
-            },
-            {
-                'name': 'SERVICE ACTION',
-                'length': 5,
-                'byte': 1,
-                'bit': 0,
-                'id': true,
-                'value': 7
-            },
-            {
-                'name': 'Reserved',
-                'length': 3,
-                'byte': 1,
-                'bit': 5,
-                'reserved': true
-            },
-            {
-                'name': 'LIST IDENTIFIER',
-                'length': 32,
-                'byte': 2,
-                'bit': 0
-            },
-            {
-                'name': 'Reserved',
-                'length': 32,
-                'byte': 6,
-                'bit': 0,
-                'reserved': true
-            },
-            {
-                'name': 'ALLOCATION LENGTH',
-                'length': 32,
-                'byte': 10,
-                'bit': 0
-            },
-            {
-                'name': 'Reserved',
-                'length': 8,
-                'byte': 14,
-                'bit': 0,
-                'reserved': true
-            },
-            {
-                'name': 'CONTROL',
-                'length': 8,
-                'byte': 15,
                 'bit': 0
             }
         ],
@@ -4645,7 +4689,7 @@ let cdbDescriptors = [
         'identifiers': [
             'OPERATION CODE'
         ]
-    }
+    },
 ];
 
 module.exports = cdbDescriptors;
