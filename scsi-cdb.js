@@ -4,6 +4,7 @@ var printf = require('printf');
 var bigInt = require('big-integer');
 var logger = require('winston');
 var cdbDescriptors = require('./cdb-descriptors');
+var beEvil = true;
 
 class ScsiCdb {
     constructor(args) {
