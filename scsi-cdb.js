@@ -140,6 +140,8 @@ class ScsiCdb {
                     let value = this.getFieldByName(input, cdbDescriptor, identifier);
                     let expectedValue = this.getFieldExpectedValue(cdbDescriptor, identifier);
 
+                    logger.debug(`identifier: ${identifier}, value: ${value}, expectedValue: ${expectedValue}`);
+
                     if (!value.equals(expectedValue)) {
                         match = false;
                     }

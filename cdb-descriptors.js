@@ -1,6 +1,3017 @@
 'use strict';
 
 let cdbDescriptors = [
+    // SCSI Primary Commands - 5 (SPC-5) Revision 15
+    {
+        'name': 'BIND',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0e
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'NRD',
+                'length': 1,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 2,
+                'bit': 1,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 72,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'CHANGE ALIASES',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0b
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'COPY OPERATION ABORT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x83
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x1c
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'LIST IDENTIFIER',
+                'length': 32,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 72,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'COPY OPERATION CLOSE',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x83
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x1d
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'LIST IDENTIFIER',
+                'length': 32,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'IMMED',
+                'length': 1,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'TO_MED',
+                'length': 1,
+                'byte': 6,
+                'bit': 1,
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 6,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 64,
+                'byte': 7,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'EXTENDED COPY',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x83
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x01
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 64,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'INQUIRY',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x12
+            },
+            {
+                'name': 'EVPD',
+                'length': 1,
+                'byte': 1,
+                'bit': 0,
+            },
+            {
+                'name': 'Obsolete',
+                'length': 1,
+                'byte': 1,
+                'bit': 1,
+                'obsolete': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 1,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 8,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'LOG SELECT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x4c
+            },
+            {
+                'name': 'SP',
+                'length': 1,
+                'byte': 1,
+                'bit': 0,
+            },
+            {
+                'name': 'PCR',
+                'length': 1,
+                'byte': 1,
+                'bit': 1,
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 1,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 6,
+                'byte': 2,
+                'bit': 3,
+            },
+            {
+                'name': 'PC',
+                'length': 2,
+                'byte': 2,
+                'bit': 6,
+            },
+            {
+                'name': 'SUBPAGE CODE',
+                'length': 8,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 4,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 7,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'LOG SENSE',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x4d
+            },
+            {
+                'name': 'SP',
+                'length': 1,
+                'byte': 1,
+                'bit': 0,
+            },
+            {
+                'name': 'Obsolete',
+                'length': 1,
+                'byte': 1,
+                'bit': 1,
+                'obsolete': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 1,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 6,
+                'byte': 2,
+                'bit': 3,
+            },
+            {
+                'name': 'PC',
+                'length': 2,
+                'byte': 2,
+                'bit': 6,
+            },
+            {
+                'name': 'SUBPAGE CODE',
+                'length': 8,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 4,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER POINTER',
+                'length': 16,
+                'byte': 5,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 7,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'MANAGEMENT PROTOCOL IN',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x10
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL',
+                'length': 8,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL SPECIFIC1',
+                'length': 24,
+                'byte': 3,
+                'bit': 0
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL SPECIFIC2',
+                'length': 8,
+                'byte': 10,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'MANAGEMENT PROTOCOL OUT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x10
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL',
+                'length': 8,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL SPECIFIC1',
+                'length': 24,
+                'byte': 3,
+                'bit': 0
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'MANAGEMENT PROTOCOL SPECIFIC2',
+                'length': 8,
+                'byte': 10,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'MODE SELECT (6)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x15
+            },
+            {
+                'name': 'SP',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'RTD',
+                'length': 1,
+                'byte': 1,
+                'bit': 1
+            },
+            {
+                'name': 'Reserved',
+                'length': 2,
+                'byte': 1,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'PF',
+                'length': 1,
+                'byte': 1,
+                'bit': 4
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 8,
+                'byte': 4,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'MODE SELECT (10)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x55
+            },
+            {
+                'name': 'SP',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'RTD',
+                'length': 1,
+                'byte': 1,
+                'bit': 1
+            },
+            {
+                'name': 'Reserved',
+                'length': 2,
+                'byte': 1,
+                'bit': 2,
+                'reserved': true
+            },
+            {
+                'name': 'PF',
+                'length': 1,
+                'byte': 1,
+                'bit': 4
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 40,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 7,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'MODE SENSE (6)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x1a
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'DBD',
+                'length': 1,
+                'byte': 1,
+                'bit': 3
+            },
+            {
+                'name': 'Reserved',
+                'length': 4,
+                'byte': 1,
+                'bit': 4,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 6,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'PC',
+                'length': 2,
+                'byte': 2,
+                'bit': 6
+            },
+            {
+                'name': 'SUBPAGE CODE',
+                'length': 8,
+                'byte': 3,
+                'bit': 0
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 8,
+                'byte': 4,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0
+            }
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'MODE SENSE (10)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x5a
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'DBD',
+                'length': 1,
+                'byte': 1,
+                'bit': 3
+            },
+            {
+                'name': 'LLBAA',
+                'length': 1,
+                'byte': 1,
+                'bit': 4
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 6,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'PC',
+                'length': 2,
+                'byte': 2,
+                'bit': 6
+            },
+            {
+                'name': 'SUBPAGE CODE',
+                'length': 8,
+                'byte': 3,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 4,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 7,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0
+            }
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'PERSISTENT RESERVE IN',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x5e
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 40,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 7,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'PERSISTENT RESERVE OUT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x5f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'TYPE',
+                'length': 4,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'SCOPE',
+                'length': 4,
+                'byte': 2,
+                'bit': 4
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 5,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'PREPARE BINDING REPORT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0c
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 80,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'READ ATTRIBUTE',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x8c
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Restricted (see SMC-3)',
+                'length': 24,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'LOGICAL VOLUME NUMBER',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARTITION NUMBER',
+                'length': 8,
+                'byte': 7,
+                'bit': 0,
+            },
+            {
+                'name': 'FIRST ATTRIBUTE IDENTIFIER',
+                'length': 16,
+                'byte': 8,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'READ BUFFER (10)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x3c
+            },
+            {
+                'name': 'MODE',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'MODE SPECIFIC',
+                'length': 3,
+                'byte': 1,
+                'bit': 5
+            },
+            {
+                'name': 'BUFFER ID',
+                'length': 8,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'BUFFER OFFSET',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 24,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'READ BUFFER (16)',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9b
+            },
+            {
+                'name': 'MODE',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'MODE SPECIFIC',
+                'length': 3,
+                'byte': 1,
+                'bit': 5
+            },
+            {
+                'name': 'BUFFER OFFSET',
+                'length': 64,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'BUFFER ID',
+                'length': 8,
+                'byte': 14,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'READ MEDIA SERIAL NUMBER',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xab
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x01
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE BINDING REPORT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9e
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0f
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'BINDING LIST IDENTIFIER',
+                'length': 32,
+                'byte': 4,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 8,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE COPY DATA',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x84
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x06
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'LIST IDENTIFIER',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE COPY STATUS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x84
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x05
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'LIST IDENTIFIER',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE DIAGNOSTIC RESULTS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x1c
+            },
+            {
+                'name': 'PCV',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 1,
+                'bit': 1,
+                'reserved': true
+            },
+            {
+                'name': 'PAGE CODE',
+                'length': 8,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 16,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'RECEIVE ROD TOKEN INFORMATION',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x84
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x07
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'LIST IDENTIFIER',
+                'length': 32,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE I_T NEXUS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0c
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT ALIASES',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0b
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'RECEIVE ALL ROD TOKENS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x84
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x08
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 64,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT IDENTIFYING INFORMATION',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x05
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'Restricted (see SCC-2)',
+                'length': 16,
+                'byte': 4,
+                'bit': 0
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 1,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'IDENTIFYING INFORMATION TYPE',
+                'length': 7,
+                'byte': 10,
+                'bit': 1,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT LUNS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 1,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'SELECT REPORT',
+                'length': 8,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'REPORT PRIORITY',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0e
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PRIORITY REPORTED',
+                'length': 2,
+                'byte': 2,
+                'bit': 6
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT SUPPORTED OPERATION CODES',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0c
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'REPORTING OPTIONS',
+                'length': 3,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 4,
+                'byte': 2,
+                'bit': 3,
+                'reserved': true
+            },
+            {
+                'name': 'RCTD',
+                'length': 1,
+                'byte': 2,
+                'bit': 7
+            },
+            {
+                'name': 'REQUESTED OPERATION CODE',
+                'length': 8,
+                'byte': 3,
+                'bit': 0
+            },
+            {
+                'name': 'REQUESTED SERVICE ACTION',
+                'length': 16,
+                'byte': 4,
+                'bit': 0,
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT SUPPORTED TASK MANAGEMENT FUNCTIONS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0d
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'REPD',
+                'length': 1,
+                'byte': 2,
+                'bit': 7
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT TARGET PORT GROUPS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0a
+            },
+            {
+                'name': 'PARAMETER DATA FORMAT',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REPORT TIMESTAMP',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa3
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0f
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'REQUEST SENSE',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x03
+            },
+            {
+                'name': 'DESC',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 1,
+                'bit': 1,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 8,
+                'byte': 4,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'SECURITY PROTOCOL IN',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa2
+            },
+            {
+                'name': 'SECURITY PROTOCOL',
+                'length': 8,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'SECURITY PROTOCOL SPECIFIC',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 4,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'INC_512',
+                'length': 1,
+                'byte': 4,
+                'bit': 7
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'ALLOCATION LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'SECURITY PROTOCOL OUT',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xb5
+            },
+            {
+                'name': 'SECURITY PROTOCOL',
+                'length': 8,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'SECURITY PROTOCOL SPECIFIC',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 4,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'INC_512',
+                'length': 1,
+                'byte': 4,
+                'bit': 7
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'TRANSFER LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'SEND DIAGNOSTIC',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x1d
+            },
+            {
+                'name': 'UNITOFFL',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'DEVOFFL',
+                'length': 1,
+                'byte': 1,
+                'bit': 1
+            },
+            {
+                'name': 'SELFTEST',
+                'length': 1,
+                'byte': 1,
+                'bit': 2
+            },
+            {
+                'name': 'Reserved',
+                'length': 1,
+                'byte': 1,
+                'bit': 3,
+                'reserved': true
+            },
+            {
+                'name': 'PF',
+                'length': 1,
+                'byte': 1,
+                'bit': 4
+            },
+            {
+                'name': 'SELF-TEST CODE',
+                'length': 3,
+                'byte': 1,
+                'bit': 5
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    }, 
+    {
+        'name': 'SET AFFILIATION',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0d
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 64,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'SET IDENTIFYING INFORMATION',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x06
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'Restricted (see SCC-2)',
+                'length': 16,
+                'byte': 4,
+                'bit': 0
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 1,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'IDENTIFYING INFORMATION TYPE',
+                'length': 7,
+                'byte': 10,
+                'bit': 1,
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    }, 
+    {
+        'name': 'SET PRIORITY',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0e
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 6,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'I_T_L NEXUS TO SET',
+                'length': 2,
+                'byte': 2,
+                'bit': 6
+            },
+            {
+                'name': 'Reserved',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    },
+    {
+        'name': 'SET TARGET PORT GROUPS',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0a
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    },
+    {
+        'name': 'SET TIMESTAMP',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0xa4
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0f
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 10,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 11,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    },
+    {
+        'name': 'TEST BIND',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0b
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 80,
+                'byte': 2,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    },
+    {
+        'name': 'TEST UNIT READY',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 32,
+                'byte': 1,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 5,
+                'bit': 0
+            }
+        ],
+        'identifiers': [
+            'OPERATION CODE'
+        ]
+    },
+    {
+        'name': 'UNBIND',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x9f
+            },
+            {
+                'name': 'SERVICE ACTION',
+                'length': 5,
+                'byte': 1,
+                'bit': 0,
+                'id': true,
+                'value': 0x0f
+            },
+            {
+                'name': 'Reserved',
+                'length': 3,
+                'byte': 1,
+                'bit': 5,
+                'reserved': true
+            },
+            {
+                'name': 'ALL CONG',
+                'length': 1,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 2,
+                'bit': 1,
+                'reserved': true
+            },
+            {
+                'name': 'Reserved',
+                'length': 72,
+                'byte': 3,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 16,
+                'byte': 12,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE', 'SERVICE ACTION' ]
+    },
+    {
+        'name': 'WRITE ATTRIBUTE',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x8d
+            },
+            {
+                'name': 'WTC',
+                'length': 1,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 7,
+                'byte': 1,
+                'bit': 1,
+                'reserved': true
+            },
+            {
+                'name': 'Restricted (see SMC-3)',
+                'length': 24,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'LOGICAL VOLUME NUMBER',
+                'length': 8,
+                'byte': 5,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 6,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARTITION NUMBER',
+                'length': 8,
+                'byte': 7,
+                'bit': 0,
+            },
+            {
+                'name': 'Reserved',
+                'length': 16,
+                'byte': 8,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 32,
+                'byte': 10,
+                'bit': 0
+            },
+            {
+                'name': 'Reserved',
+                'length': 8,
+                'byte': 14,
+                'bit': 0,
+                'reserved': true
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 15,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    },
+    {
+        'name': 'WRITE BUFFER',
+        'fields': [
+            {
+                'name': 'OPERATION CODE',
+                'length': 8,
+                'byte': 0,
+                'bit': 0,
+                'id': true,
+                'value': 0x3b
+            },
+            {
+                'name': 'MODE',
+                'length': 5,
+                'byte': 1,
+                'bit': 0
+            },
+            {
+                'name': 'MODE SPECIFIC',
+                'length': 3,
+                'byte': 1,
+                'bit': 5
+            },
+            {
+                'name': 'BUFFER ID',
+                'length': 8,
+                'byte': 2,
+                'bit': 0
+            },
+            {
+                'name': 'BUFFER OFFSET',
+                'length': 24,
+                'byte': 3,
+                'bit': 0,
+            },
+            {
+                'name': 'PARAMETER LIST LENGTH',
+                'length': 24,
+                'byte': 6,
+                'bit': 0
+            },
+            {
+                'name': 'CONTROL',
+                'length': 8,
+                'byte': 9,
+                'bit': 0,
+            },
+        ],
+        'identifiers': [ 'OPERATION CODE' ]
+    },
     // SCSI Block Commands (SBC-4) 29 May 2015
     {
         'name': 'BACKGROUND CONTROL',
@@ -4659,35 +7670,6 @@ let cdbDescriptors = [
         'identifiers': [
             'OPERATION CODE',
             'SERVICE ACTION'
-        ]
-    },
-    {
-        'name': 'TEST UNIT READY',
-        'fields': [
-            {
-                'name': 'OPERATION CODE',
-                'length': 8,
-                'byte': 0,
-                'bit': 0,
-                'id': true,
-                'value': 0
-            },
-            {
-                'name': 'Reserved',
-                'length': 32,
-                'byte': 1,
-                'bit': 0,
-                'reserved': true
-            },
-            {
-                'name': 'CONTROL',
-                'length': 8,
-                'byte': 5,
-                'bit': 0
-            }
-        ],
-        'identifiers': [
-            'OPERATION CODE'
         ]
     },
 ];
