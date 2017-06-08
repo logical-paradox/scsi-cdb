@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 var ScsiCdb = require('../scsi-cdb');
-var scsiCdb = new ScsiCdb();
+var scsiCdb = new ScsiCdb(); // { 'logLevel': 'debug' });
 
 describe('scsi-cdb', function() {
   describe('decode()', function() {
@@ -43,7 +43,887 @@ describe('scsi-cdb', function() {
       });
     });
 
-    describe('known message handling', function() {
+    describe('SCSI Primary Commands', function() {
+      it('successfully decodes a BIND command', function(done) {
+        var output = scsiCdb.decode([ 0x9f, 0x0e, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0x00, 0x2b ]);
+        expect(output).to.deep.equal({
+          name: "BIND",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xe", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "NRD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 72, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a CHANGE ALIASES command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x0b, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "CHANGE ALIASES",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xb", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a COPY OPERATION ABORT command', function(done) {
+        var output = scsiCdb.decode([ 0x83, 0x1c, 0xde, 0xad, 0xbe, 0xef, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "COPY OPERATION ABORT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x83", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1c", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "LIST IDENTIFIER", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 72, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a COPY OPERATION CLOSE command', function(done) {
+        var output = scsiCdb.decode([ 0x83, 0x1d, 0xde, 0xad, 0xbe, 0xef, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "COPY OPERATION CLOSE",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x83", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1d", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "LIST IDENTIFIER", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "IMMED", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "TO_MED", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 64, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes an EXTENDED COPY command', function(done) {
+        var output = scsiCdb.decode([ 0x83, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "EXTENDED COPY",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x83", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 64, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes an INQUIRY command', function(done) {
+        var output = scsiCdb.decode([ 0x12, 0x01, 0xff, 0xde, 0xad, 0x2b ]);
+        expect(output).to.deep.equal({
+          name: "INQUIRY",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x12", reserved: false, obsolete: false },
+            { name: "EVPD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Obsolete", bits: 1, value: "0x0", reserved: false, obsolete: true },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 8, value: "0xff", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a LOG SELECT command', function(done) {
+        var output = scsiCdb.decode([ 0x4c, 0x03, 0xff, 0x2b, 0x00, 0x00, 0x00, 0xde, 0xad, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "LOG SELECT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x4c", reserved: false, obsolete: false },
+            { name: "SP", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "PCR", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 6, value: "0x3f", reserved: false, obsolete: false },
+            { name: "PC", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "SUBPAGE CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a LOG SENSE command', function(done) {
+        var output = scsiCdb.decode([ 0x4d, 0x01, 0xff, 0x2b, 0x00, 0xde, 0xad, 0xbe, 0xef, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "LOG SENSE",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x4d", reserved: false, obsolete: false },
+            { name: "SP", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Obsolete", bits: 1, value: "0x0", reserved: false, obsolete: true },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 6, value: "0x3f", reserved: false, obsolete: false },
+            { name: "PC", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "SUBPAGE CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER POINTER", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xbeef", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MANAGEMENT PROTOCOL IN command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x10, 0x2b, 0xde, 0xad, 0xbe, 0x2b, 0xb2, 0x1c, 0xc1, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MANAGEMENT PROTOCOL IN",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x10", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL SPECIFIC1", bits: 24, value: "0xdeadbe", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0x2bb21cc1", reserved: false, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL SPECIFIC2", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MANAGEMENT PROTOCOL OUT command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x10, 0x2b, 0xde, 0xad, 0xbe, 0x2b, 0xb2, 0x1c, 0xc1, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MANAGEMENT PROTOCOL OUT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x10", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL SPECIFIC1", bits: 24, value: "0xdeadbe", reserved: false, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0x2bb21cc1", reserved: false, obsolete: false },
+            { name: "MANAGEMENT PROTOCOL SPECIFIC2", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MODE SELECT (6) command', function(done) {
+        var output = scsiCdb.decode([ 0x15, 0x13, 0x00, 0x00, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MODE SELECT (6)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x15", reserved: false, obsolete: false },
+            { name: "SP", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "RTD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 2, value: "0x0", reserved: true, obsolete: false },
+            { name: "PF", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MODE SELECT (10) command', function(done) {
+        var output = scsiCdb.decode([ 0x55, 0x13, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MODE SELECT (10)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x55", reserved: false, obsolete: false },
+            { name: "SP", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "RTD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 2, value: "0x0", reserved: true, obsolete: false },
+            { name: "PF", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 40, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MODE SENSE (6) command', function(done) {
+        var output = scsiCdb.decode([ 0x1a, 0x08, 0xff, 0x2b, 0xb2, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MODE SENSE (6)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x1a", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "DBD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 4, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 6, value: "0x3f", reserved: false, obsolete: false },
+            { name: "PC", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "SUBPAGE CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 8, value: "0xb2", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a MODE SENSE (10) command', function(done) {
+        var output = scsiCdb.decode([ 0x5a, 0x18, 0xff, 0x2b, 0x00, 0x00, 0x00, 0xbe, 0xef, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "MODE SENSE (10)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x5a", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "DBD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "LLBAA", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 6, value: "0x3f", reserved: false, obsolete: false },
+            { name: "PC", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "SUBPAGE CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xbeef", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a PERSISTENT RESERVE IN command', function(done) {
+        var output = scsiCdb.decode([ 0x5e, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "PERSISTENT RESERVE IN",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x5e", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 40, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a PERSISTENT RESERVE OUT command', function(done) {
+        var output = scsiCdb.decode([ 0x5f, 0x1f, 0xff, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "PERSISTENT RESERVE OUT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x5f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "TYPE", bits: 4, value: "0xf", reserved: false, obsolete: false },
+            { name: "SCOPE", bits: 4, value: "0xf", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a PREPARE BINDING REPORT command', function(done) {
+        var output = scsiCdb.decode([ 0x9f, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "PREPARE BINDING REPORT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xc", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 80, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a READ ATTRIBUTE command', function(done) {
+        var output = scsiCdb.decode([ 0x8c, 0x1f, 0x00, 0x00, 0x00, 0x2b, 0x00, 0xb2, 0xde, 0xad, 0xbe, 0xef, 0xfe, 0xed, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "READ ATTRIBUTE",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x8c", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Restricted (see SMC-3)", bits: 24, value: "0x0", reserved: false, obsolete: false },
+            { name: "LOGICAL VOLUME NUMBER", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARTITION NUMBER", bits: 8, value: "0xb2", reserved: false, obsolete: false },
+            { name: "FIRST ATTRIBUTE IDENTIFIER", bits: 16, value: "0xdead", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xbeeffeed", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a READ BUFFER (10) command', function(done) {
+        var output = scsiCdb.decode([ 0x3c, 0xff, 0x2b, 0xfe, 0xed, 0xfa, 0xce, 0xbe, 0xef, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "READ BUFFER (10)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x3c", reserved: false, obsolete: false },
+            { name: "MODE", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "MODE SPECIFIC", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "BUFFER ID", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "BUFFER OFFSET", bits: 24, value: "0xfeedfa", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 24, value: "0xcebeef", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a READ BUFFER (16) command', function(done) {
+        var output = scsiCdb.decode([ 0x9b, 0xff, 0xde, 0xad, 0xbe, 0xef, 0xfe, 0xed, 0xfa, 0xce, 0x2b, 0xb2, 0x1c, 0xc1, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "READ BUFFER (16)",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9b", reserved: false, obsolete: false },
+            { name: "MODE", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "MODE SPECIFIC", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "BUFFER OFFSET", bits: 64, value: "0xdeadbeeffeedface", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0x2bb21cc1", reserved: false, obsolete: false },
+            { name: "BUFFER ID", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a READ MEDIA SERIAL NUMBER command', function(done) {
+        var output = scsiCdb.decode([ 0xab, 0x01, 0x00, 0x00, 0x00, 0x00, 0xfe, 0xed, 0xfa, 0xce, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "READ MEDIA SERIAL NUMBER",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xab", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xfeedface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a RECEIVE BINDING REPORT command', function(done) {
+        var output = scsiCdb.decode([ 0x9e, 0x0f, 0x00, 0x00, 0xfe, 0xed, 0xfa, 0xce, 0x00, 0x00, 0x00, 0x00, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE BINDING REPORT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9e", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xf", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "BINDING LIST IDENTIFIER", bits: 32, value: "0xfeedface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a RECEIVE COPY DATA command', function(done) {
+        var output = scsiCdb.decode([ 0x84, 0x06, 0xfe, 0xed, 0xfa, 0xce, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE COPY DATA",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x84", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x6", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "LIST IDENTIFIER", bits: 32, value: "0xfeedface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a RECEIVE COPY STATUS command', function(done) {
+        var output = scsiCdb.decode([ 0x84, 0x05, 0xfe, 0xed, 0xfa, 0xce, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE COPY STATUS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x84", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x5", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "LIST IDENTIFIER", bits: 32, value: "0xfeedface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a RECEIVE DIAGNOSTIC RESULTS command', function(done) {
+        var output = scsiCdb.decode([ 0x1c, 0x01, 0x2b, 0xfe, 0xed, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE DIAGNOSTIC RESULTS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x1c", reserved: false, obsolete: false },
+            { name: "PCV", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "PAGE CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a RECEIVE ROD TOKEN INFORMATION command', function(done) {
+        var output = scsiCdb.decode([ 0x84, 0x07, 0xde, 0xad, 0xbe, 0xef, 0x00, 0x00, 0x00, 0x00, 0x2b, 0xb2, 0x3c, 0xc3, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE ROD TOKEN INFORMATION",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x84", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x7", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "LIST IDENTIFIER", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0x2bb23cc3", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REMOVE I_T NEXUS command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x0c, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE I_T NEXUS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xc", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT ALIASES command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x0b, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT ALIASES",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xb", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT ALL ROD TOKENS command', function(done) {
+        var output = scsiCdb.decode([ 0x84, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "RECEIVE ALL ROD TOKENS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x84", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x8", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 64, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT IDENTIFYING INFORMATION command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x05, 0x00, 0x00, 0xaa, 0xbb, 0xde, 0xad, 0xbe, 0xef, 0xfe, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT IDENTIFYING INFORMATION",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x5", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "Restricted (see SCC-2)", bits: 16, value: "0xaabb", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 1, value: "0x0", reserved: true, obsolete: false },
+            { name: "IDENTIFYING INFORMATION TYPE", bits: 7, value: "0x7f", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT LUNS command', function(done) {
+        var output = scsiCdb.decode([ 0xa0, 0x00, 0xff, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT LUNS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa0", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "SELECT REPORT", bits: 8, value: "0xff", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT PRIORITY command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x0e, 0xc0, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT PRIORITY",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xe", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "PRIORITY REPORTED", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT SUPPORTED OPERATION CODES command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x0c, 0x87, 0x2b, 0xfe, 0xed, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT SUPPORTED OPERATION CODES",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xc", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "REPORTING OPTIONS", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 4, value: "0x0", reserved: true, obsolete: false },
+            { name: "RCTD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "REQUESTED OPERATION CODE", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "REQUESTED SERVICE ACTION", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT SUPPORTED TASK MANAGEMENT FUNCTIONS command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x0d, 0x80, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT SUPPORTED TASK MANAGEMENT FUNCTIONS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xd", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "REPD", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT TARGET PORT GROUPS command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0xea, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT TARGET PORT GROUPS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xa", reserved: false, obsolete: false },
+            { name: "PARAMETER DATA FORMAT", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REPORT TIMESTAMP command', function(done) {
+        var output = scsiCdb.decode([ 0xa3, 0x0f, 0x00, 0x00, 0x00, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REPORT TIMESTAMP",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa3", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xf", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a REQUEST SENSE command', function(done) {
+        var output = scsiCdb.decode([ 0x03, 0x01, 0x00, 0x00, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "REQUEST SENSE",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x3", reserved: false, obsolete: false },
+            { name: "DESC", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SECURITY PROTOCOL IN command', function(done) {
+        var output = scsiCdb.decode([ 0xa2, 0xff, 0xfe, 0xed, 0x80, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SECURITY PROTOCOL IN",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa2", reserved: false, obsolete: false },
+            { name: "SECURITY PROTOCOL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+            { name: "SECURITY PROTOCOL SPECIFIC", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "INC_512", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALLOCATION LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SECURITY PROTOCOL OUT command', function(done) {
+        var output = scsiCdb.decode([ 0xb5, 0xff, 0xfe, 0xed, 0x80, 0x00, 0xde, 0xad, 0xbe, 0xef, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SECURITY PROTOCOL OUT",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xb5", reserved: false, obsolete: false },
+            { name: "SECURITY PROTOCOL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+            { name: "SECURITY PROTOCOL SPECIFIC", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "INC_512", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "TRANSFER LENGTH", bits: 32, value: "0xdeadbeef", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SEND DIAGNOSTIC command', function(done) {
+        var output = scsiCdb.decode([ 0x1d, 0xf7, 0x00, 0xfe, 0xed, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SEND DIAGNOSTIC",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x1d", reserved: false, obsolete: false },
+            { name: "UNITOFFL", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "DEVOFFL", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "SELFTEST", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 1, value: "0x0", reserved: true, obsolete: false },
+            { name: "PF", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "SELF-TEST CODE", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SET AFFILIATION command', function(done) {
+        var output = scsiCdb.decode([ 0x9f, 0x0d, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfe, 0xed, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SET AFFILIATION",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xd", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 64, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SET IDENTIFYING INFORMATION command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x06, 0x00, 0x00, 0xfe, 0xed, 0xfa, 0xce, 0xd0, 0x0d, 0xfe, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SET IDENTIFYING INFORMATION",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0x6", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "Restricted (see SCC-2)", bits: 16, value: "0xfeed", reserved: false, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xfaced00d", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 1, value: "0x0", reserved: true, obsolete: false },
+            { name: "IDENTIFYING INFORMATION TYPE", bits: 7, value: "0x7f", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SET PRIORITY command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x0e, 0xc0, 0x00, 0x00, 0x00, 0xfa, 0xce, 0xd0, 0x0d, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SET PRIORITY",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xe", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 6, value: "0x0", reserved: true, obsolete: false },
+            { name: "I_T_L NEXUS TO SET", bits: 2, value: "0x3", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 24, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xfaced00d", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SET TARGET PORT GROUPS command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x0a, 0x00, 0x00, 0x00, 0x00, 0xfa, 0xce, 0xd0, 0x0d, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SET TARGET PORT GROUPS",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xa", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xfaced00d", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a SET TIMESTAMP command', function(done) {
+        var output = scsiCdb.decode([ 0xa4, 0x0f, 0x00, 0x00, 0x00, 0x00, 0xfa, 0xce, 0xd0, 0x0d, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "SET TIMESTAMP",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0xa4", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xf", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 32, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xfaced00d", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a TEST BIND command', function(done) {
+        var output = scsiCdb.decode([ 0x9f, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfa, 0xce, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "TEST BIND",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xb", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 80, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
       it('successfully decodes a TEST UNIT READY command', function(done) {
         var output = scsiCdb.decode([ 0, 0, 0, 0, 0, 0 ]);
         expect(output).to.deep.equal({
@@ -58,6 +938,68 @@ describe('scsi-cdb', function() {
         done();
       });
 
+      it('successfully decodes a UNBIND command', function(done) {
+        var output = scsiCdb.decode([ 0x9f, 0x0f, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfa, 0xce, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "UNBIND",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x9f", reserved: false, obsolete: false },
+            { name: "SERVICE ACTION", bits: 5, value: "0xf", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 3, value: "0x0", reserved: true, obsolete: false },
+            { name: "ALL CONG", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "Reserved", bits: 72, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 16, value: "0xface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a WRITE ATTRIBUTE command', function(done) {
+        var output = scsiCdb.decode([ 0x8d, 0x01, 0x0d, 0xd0, 0x0d, 0x2b, 0x00, 0xb2, 0x00, 0x00, 0xfe, 0xed, 0xfa, 0xce, 0x00, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "WRITE ATTRIBUTE",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x8d", reserved: false, obsolete: false },
+            { name: "WTC", bits: 1, value: "0x1", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 7, value: "0x0", reserved: true, obsolete: false },
+            { name: "Restricted (see SMC-3)", bits: 24, value: "0xdd00d", reserved: false, obsolete: false },
+            { name: "LOGICAL VOLUME NUMBER", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARTITION NUMBER", bits: 8, value: "0xb2", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 16, value: "0x0", reserved: true, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 32, value: "0xfeedface", reserved: false, obsolete: false },
+            { name: "Reserved", bits: 8, value: "0x0", reserved: true, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+
+      it('successfully decodes a WRITE BUFFER command', function(done) {
+        var output = scsiCdb.decode([ 0x3b, 0xff, 0x2b, 0x0d, 0xd0, 0x0d, 0x2b, 0xb2, 0x2b, 0xff ]);
+        expect(output).to.deep.equal({
+          name: "WRITE BUFFER",
+          fields: [
+            { name: "OPERATION CODE", bits: 8, value: "0x3b", reserved: false, obsolete: false },
+            { name: "MODE", bits: 5, value: "0x1f", reserved: false, obsolete: false },
+            { name: "MODE SPECIFIC", bits: 3, value: "0x7", reserved: false, obsolete: false },
+            { name: "BUFFER ID", bits: 8, value: "0x2b", reserved: false, obsolete: false },
+            { name: "BUFFER OFFSET", bits: 24, value: "0xdd00d", reserved: false, obsolete: false },
+            { name: "PARAMETER LIST LENGTH", bits: 24, value: "0x2bb22b", reserved: false, obsolete: false },
+            { name: "CONTROL", bits: 8, value: "0xff", reserved: false, obsolete: false },
+          ],
+          truncated: false,
+        });
+        done();
+      });
+    });
+
+    describe('SCSI Block Commands', function() {
       it('successfully decodes a BACKGROUND CONTROL command', function(done) {
         var output = scsiCdb.decode([ 0x9e, 0x15, 0xc0, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff ]);
         expect(output).to.deep.equal({
